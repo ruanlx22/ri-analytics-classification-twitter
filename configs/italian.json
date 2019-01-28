@@ -1,0 +1,49 @@
+{
+    "lang": "it",
+    "ml_features": {
+        "sentiment": ["sentistrength_plus"],
+        "problem_report": ["tfidf", "n_keywords", "sentistrength_plus", "similarity"],
+        "inquiry": ["tfidf", "n_keywords", "similarity"],
+        "irrelevant": ["tfidf", "n_keywords", "sentistrength_plus", "similarity"]
+    },
+    "models": {
+        "classifiers": {
+            "problem_report": "ml_model_problem_report-it.pickle",
+            "inquiry": "ml_model_inquiry-it.pickle",
+            "irrelevant": "ml_model_irrelevant-it.pickle"
+        },
+        "vocabulary": "vocab-it.pickle",
+        "similarity": {
+            "vectorizer": "tfidf_cosine_vectorizer.pickle",
+            "corpus_problem_report": "corpus_matrix_problem.pickle",
+            "corpus_inquiry": "corpus_matrix_inquiry.pickle",
+            "corpus_irrelevant": "corpus_matrix_irrelevant.pickle"
+        },
+        "scaler": {
+            "n_keywords": "scaler_n_keywords.pickle",
+            "linguistic": "scaler_linguistic.pickle",
+            "sentiment": "scaler_sentiment.pickle"
+        }
+    },
+    "params": {
+        "bow": {
+            "min_df": 20,
+            "max_df": 0.8
+        },
+        "tfidf": {
+            "min_df": 20,
+            "max_df": 0.8
+        },
+        "spacy": {
+            "lang": "it"
+        },
+        "keywords": {
+            "problem": "bug|crash|malfunzionamento|blocca|blocca|non funziona|smetted di funzionare|kill|morto|frustrato|bloccato|aggiustato|chiuso|errore|andato|problema'",
+            "support": "dovrebbe|vorrei|aggiungere|manca|manca|bisogno|aiuto|supporto"
+        },
+        "tense": {
+            "present": [],
+            "past": []
+        }
+    }
+}

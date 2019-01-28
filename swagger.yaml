@@ -1,0 +1,107 @@
+---
+swagger: "2.0"
+info:
+  description: This API returns a json, containing a list of processed tweets. It expects a JSON payload that
+    contains an array of at least a single tweet. An tweet json object must contain a field
+    text (string) and the status_id (string).
+  version: "1.0.1"
+  title: Classify tweets from Twitter
+  contact:
+    email: stanik@informatik.uni-hamburg.de
+host: api.openreq.eu
+basePath: /ri-analytics-classification-twitter
+schemes:
+- https
+paths:
+  /hitec/classify/domain/tweets/lang/{lang}:
+    post:
+      summary: returns an array of classified tweets.
+      description: returns an array of classified tweets.
+      operationId: post_classification_result
+      produces:
+        - application/json
+      consumes:
+              - application/json
+      parameters:
+        - in: body
+          name: an array of tweets
+          schema:
+             $ref: '#/definitions/Tweet'
+          required: true
+        - in: path
+          name: lang
+          description: the language of the tweet. Supported languages are 'it' and 'en'
+          required: true
+          type: string
+
+      responses:
+        200:
+          description: json array of classified tweets. The example only includes the minimal required information
+          schema:
+            $ref: '#/definitions/ProcessedTweet'
+        400:
+          description: error during the processing of the tweets.
+definitions:
+  Tweet:
+    type: object
+    properties:
+      created_at:
+        type:  integer
+        example: 20181201
+      favorite_count: 
+        type:  integer
+        example: 1
+      retweet_count:
+        type:  integer
+        example: 1
+      status_id:
+        type: string
+        example: 933476766408200193
+      in_reply_to_screen_name:
+        type: string
+        example: musteraccount
+      lang:
+        type: string
+        example: en
+      text:
+        type: string
+        example: "@maxmustermann Thanks for your message!"
+      user_name:
+        type: string
+        example: maxmustermann
+  ProcessedTweet:
+    type: object
+    properties:
+      created_at:
+        type:  integer
+        example: 20181201
+      favorite_count: 
+        type:  integer
+        example: 1
+      retweet_count:
+        type:  integer
+        example: 1
+      status_id:
+        type: string
+        example: 933476766408200193
+      in_reply_to_screen_name:
+        type: string
+        example: musteraccount
+      lang:
+        type: string
+        example: en
+      text:
+        type: string
+        example: "@maxmustermannThanks for your message!"
+      user_name:
+        type: string
+        example: maxmustermann
+      sentiment:
+        type: string
+        example: NEUTRAL
+      sentiment_score:
+        type: integer
+        example: -1
+      tweet_class: 
+        type: string
+        example: problem_report
