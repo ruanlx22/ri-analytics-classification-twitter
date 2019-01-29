@@ -252,8 +252,6 @@ class Extractor:
         score_neg = int(raw_sentiment[1])
         score_single = score_pos - -score_neg
 
-        print(raw_sentiment)
-
         tweet_dict = dict()
         if 'sentiment_simplified' in self.conf[CFG_FEATURES]['sentiment']:
             tweet_dict['sentiment_is_negative'] = 1 if score_single < -1 else 0
@@ -267,7 +265,6 @@ class Extractor:
         self.sentiment['sentiment_pos'] = score_pos
         self.sentiment['sentiment_neg'] = score_neg
         self.sentiment['sentiment_single'] = score_single
-        print(self.sentiment)
 
         self.df_sentiments = pd.DataFrame([tweet_dict])
         if 'sentiment' in self.conf[CFG_MODELS]['scaler']:
@@ -284,8 +281,6 @@ class Extractor:
         elif (self.sentiment['sentiment_single'] > 1):
             sentiment = 'POSTIVE'
         tweet['sentiment'] = sentiment
-
-        print('self.sentiment', self.sentiment)
 
         return tweet
 
