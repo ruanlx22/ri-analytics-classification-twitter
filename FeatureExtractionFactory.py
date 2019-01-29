@@ -58,6 +58,7 @@ class Extractor:
         self.df_tfidf = None
         self.df_n_keywords = None
         self.df_similarity = None
+        self.sentiment = dict()
 
     def reset(self):
         self.df_root = None
@@ -67,6 +68,7 @@ class Extractor:
         self.df_tfidf = None
         self.df_n_keywords = None
         self.df_similarity = None
+        self.sentiment = dict()
 
     def extract_features(self, tweet):
         self.tweet = self.prepare_tweet(tweet)
@@ -250,6 +252,8 @@ class Extractor:
         score_neg = int(raw_sentiment[1])
         score_single = score_pos - -score_neg
 
+        print(raw_sentiment)
+
         tweet_dict = dict()
         if 'sentiment_simplified' in self.conf[CFG_FEATURES]['sentiment']:
             tweet_dict['sentiment_is_negative'] = 1 if score_single < -1 else 0
@@ -259,21 +263,29 @@ class Extractor:
         tweet_dict['sentiment_neg'] = score_neg
         tweet_dict['sentiment_single'] = score_single
 
+
+        self.sentiment['sentiment_pos'] = score_pos
+        self.sentiment['sentiment_neg'] = score_neg
+        self.sentiment['sentiment_single'] = score_single
+        print(self.sentiment)
+
         self.df_sentiments = pd.DataFrame([tweet_dict])
         if 'sentiment' in self.conf[CFG_MODELS]['scaler']:
             self.df_sentiments[self.df_sentiments.columns] = self.model.scaler_sentiment.transform(self.df_sentiments[self.df_sentiments.columns])
 
     def extract_sentiment_onehot_encoding(self):
         tweet = dict()
-        tweet['sentiment_score'] = int(self.df_sentiments['sentiment_single'][0])
+        tweet['sentiment_score'] = int(self.sentiment['sentiment_single'])
         sentiment = ''
-        if (self.df_sentiments['sentiment_single'][0] < -1):
+        if (self.sentiment['sentiment_single'] < -1):
             sentiment = 'NEGATIVE'
-        elif (self.df_sentiments['sentiment_single'][0] >= -1 and self.df_sentiments['sentiment_single'][0] <= 1):
+        elif (self.sentiment['sentiment_single'] >= -1 and self.sentiment['sentiment_single'] <= 1):
             sentiment = 'NEUTRAL'
-        elif (self.df_sentiments['sentiment_single'][0] > 1):
+        elif (self.sentiment['sentiment_single'] > 1):
             sentiment = 'POSTIVE'
         tweet['sentiment'] = sentiment
+
+        print('self.sentiment', self.sentiment)
 
         return tweet
 
