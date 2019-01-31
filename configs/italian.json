@@ -2,9 +2,9 @@
     "lang": "it",
     "ml_features": {
         "sentiment": ["sentistrength_plus"],
-        "problem_report": ["tfidf", "n_keywords", "sentistrength_plus", "similarity"],
-        "inquiry": ["tfidf", "n_keywords", "similarity"],
-        "irrelevant": ["tfidf", "n_keywords", "sentistrength_plus", "similarity"]
+        "problem_report": ["tfidf", "has_keyword", "sentistrength_plus"],
+        "inquiry": ["tfidf", "has_keyword", "sentistrength_plus"],
+        "irrelevant": ["tfidf", "has_keyword", "sentistrength_plus"]
     },
     "models": {
         "classifiers": {
@@ -14,15 +14,8 @@
         },
         "vocabulary": "vocab-it.pickle",
         "similarity": {
-            "vectorizer": "tfidf_cosine_vectorizer.pickle",
-            "corpus_problem_report": "corpus_matrix_problem.pickle",
-            "corpus_inquiry": "corpus_matrix_inquiry.pickle",
-            "corpus_irrelevant": "corpus_matrix_irrelevant.pickle"
         },
         "scaler": {
-            "n_keywords": "scaler_n_keywords.pickle",
-            "linguistic": "scaler_linguistic.pickle",
-            "sentiment": "scaler_sentiment.pickle"
         }
     },
     "params": {
@@ -38,8 +31,8 @@
             "lang": "it"
         },
         "keywords": {
-            "problem": "bug|crash|malfunzionamento|blocca|blocca|non funziona|smetted di funzionare|kill|morto|frustrato|bloccato|aggiustato|chiuso|errore|andato|problema'",
-            "support": "dovrebbe|vorrei|aggiungere|manca|manca|bisogno|aiuto|supporto"
+            "problem": "",
+            "support": ""
         },
         "tense": {
             "present": [],
