@@ -59,6 +59,7 @@ class Extractor:
         self.df_bow = None
         self.df_tfidf = None
         self.df_n_keywords = None
+        self.df_has_keyword = None
         self.df_similarity = None
         self.sentiment = dict()
 
@@ -69,6 +70,7 @@ class Extractor:
         self.df_bow = None
         self.df_tfidf = None
         self.df_n_keywords = None
+        self.df_has_keyword = None
         self.df_similarity = None
         self.sentiment = dict()
 
@@ -342,6 +344,31 @@ class Extractor:
         if 'n_keywords' in self.conf[CFG_MODELS]['scaler']:
             self.df_n_keywords[self.df_n_keywords.columns] = self.model.scaler_keywords.transform(self.df_n_keywords[self.df_n_keywords.columns])
 
+    def extract_keyword_onehot_encoding(self, tweet):
+        text = tweet['text']
+        
+        tweet_dict = dict()
+        tweet_dict['has_keyword_bug'] = 1 if len(re.findall('bug', text, re.IGNORECASE)) > 0 else 0,
+        tweet_dict['has_keyword_crash'] = 1 if len(re.findall('crash', text, re.IGNORECASE)) > 0 else 0,
+        tweet_dict['has_keyword_malfunzionamento'] = 1 if len(re.findall('malfunzionamento', text, re.IGNORECASE)) > 0 else 0,
+        tweet_dict['has_keyword_blocca'] = 1 if len(re.findall('blocca', text, re.IGNORECASE)) > 0 else 0,
+        tweet_dict['has_keyword_non_funziona'] = 1 if len(re.findall('non funziona', text, re.IGNORECASE)) > 0 else 0,
+        tweet_dict['has_keyword_morto'] = 1 if len(re.findall('morto', text, re.IGNORECASE)) > 0 else 0,
+        tweet_dict['has_keyword_chiuso'] = 1 if len(re.findall('chiuso', text, re.IGNORECASE)) > 0 else 0,
+        tweet_dict['has_keyword_err'] = 1 if len(re.findall('err', text, re.IGNORECASE)) > 0 else 0,
+        tweet_dict['has_keyword_andato'] = 1 if len(re.findall('andato', text, re.IGNORECASE)) > 0 else 0,
+        tweet_dict['has_keyword_problem'] = 1 if len(re.findall('problem', text, re.IGNORECASE)) > 0 else 0,
+        tweet_dict['has_keyword_dovrebbe'] = 1 if len(re.findall('dovrebbe', text, re.IGNORECASE)) > 0 else 0,
+        tweet_dict['has_keyword_vorrei'] = 1 if len(re.findall('vorrei', text, re.IGNORECASE)) > 0 else 0,
+        tweet_dict['has_keyword_aggiungere'] = 1 if len(re.findall('aggiungere', text, re.IGNORECASE)) > 0 else 0,
+        tweet_dict['has_keyword_manca'] = 1 if len(re.findall('manca', text, re.IGNORECASE)) > 0 else 0,
+        tweet_dict['has_keyword_bisogno'] = 1 if len(re.findall('bisogno', text, re.IGNORECASE)) > 0 else 0,
+        tweet_dict['has_keyword_aiuto'] = 1 if len(re.findall('aiuto', text, re.IGNORECASE)) > 0 else 0,
+        tweet_dict['has_keyword_supporto'] = 1 if len(re.findall('supporto', text, re.IGNORECASE)) > 0 else 0,
+        tweet_dict['has_keyword_help'] = 1 if len(re.findall('help', text, re.IGNORECASE)) > 0 else 0
+
+        self.df_has_keyword = pd.DataFrame([tweet_dict])
+
     def extract_similarity(self, tweet):
         if self.model.sim_vectorizer:
             doc_matrix = self.model.sim_vectorizer.transform([tweet['processed_tweet']])
@@ -394,6 +421,9 @@ class Extractor:
 
         if 'n_keywords' in features:
             df_features = pd.concat([df_features, self.df_n_keywords], axis=1)
+
+        if 'has_keyword' in features:
+            df_features = pd.concat([df_features, self.df_has_keyword], axis=1)
 
         if 'bow' in features:
             df_features = pd.concat([df_features, self.df_bow], axis=1)
