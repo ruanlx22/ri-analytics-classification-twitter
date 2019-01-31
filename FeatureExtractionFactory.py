@@ -81,6 +81,7 @@ class Extractor:
         self.extract_bow(self.tweet)
         self.extract_tfidf(self.tweet)
         self.extract_keyword_counts(self.tweet)
+        self.extract_keyword_onehot_encoding(self.tweet)
         self.extract_similarity(self.tweet)
 
     def prepare_tweet(self, tweet):
