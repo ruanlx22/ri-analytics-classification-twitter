@@ -12,6 +12,7 @@ from sklearn.preprocessing import MinMaxScaler
 
 from ModelFactory import CFG_FEATURES, CFG_LANG, CFG_MODELS, CFG_PARAMS
 
+SPACY_MAX_LENGTH = 3000000
 
 class FeatureExtractionFactory:
     def __init__(self):
@@ -50,6 +51,7 @@ class Extractor:
 
         print('load spacy')
         self.nlp = spacy.load(self.conf[CFG_PARAMS]['spacy']['lang'])
+        self.nlp.max_length = SPACY_MAX_LENGTH
 
         self.df_root = None
         self.df_linguistic = None
@@ -80,12 +82,27 @@ class Extractor:
         self.extract_similarity(self.tweet)
 
     def prepare_tweet(self, tweet):
-        text = tweet['text'].strip().lower()
+        text = tweet['text'] if tweet['text'] and isinstance(tweet['text'], str) else ''
+    
+        if not text or text == '' or len(text) >= SPACY_MAX_LENGTH:
+            return ''
+
+        text = text.strip().lower()
+        text = re.sub(r'(http|https):\s*/\s*/[\w\\-]+(\.[\w\\-]+)+\s*\\S*', '', text)
+        text = re.sub(r'xx*', '', text)
+        text = re.sub(r'[^\w\s\?\\@]', '', text)
         text = text.replace('\\n', '').replace('\\t', '')
-        text = ' '.join([w for w in text.split() if len(w) >= 3])
-        text = ' '.join([w for w in text.split() if 'http:' not in w])
+        # since spacy splits important information such as 4g into to two tokens, we transform 
+        # that kind of information by adding an underscore betweet the number 
+        for token in re.findall(r'\\d\\w+', text):
+            match = re.match(r'([0-9]+)([a-z]+)', token, re.I)
+            if match:
+                items = match.groups()
+                correction = items[0]+'_'+items[1]
+                text = text.replace(token, correction)
+        text = ' '.join([w for w in text.split() if '@' not in w])
         text = ' '.join([w for w in text.split() if w not in self.nlp.Defaults.stop_words])
-        text = ' '.join([w.lemma_ for w in self.nlp(text)])
+        text = ' '.join([w.lemma_ for w in self.nlp(text) if w.lemma_ != '-PRON-'])
 
         tweet_dict = dict()
         tweet_dict['text'] = tweet['text']
