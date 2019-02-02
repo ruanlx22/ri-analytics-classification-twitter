@@ -5,6 +5,9 @@ RUN pip install flask
 RUN pip install numpy
 RUN pip install scipy
 RUN pip install spacy
+RUN pi3 install scikit-learn==0.20.1
+RUN pip install sklearn -U
+RUN pip install pickle -U
 
 RUN python3 -m spacy download it
 RUN python3 -m spacy download en

@@ -36,7 +36,7 @@ def classify(model, tweets):
         extractor.extract_features(tweet)
         df_problem_report_model_data = extractor.get_features(model.features_problem_report)
         df_inquiry_model_data = extractor.get_features(model.features_inquiry)
-        df_irrelevant_model_data = extractor.get_features(model.features_irelevant)
+        df_irrelevant_model_data = extractor.get_features(model.features_irrelevant)
 
         # add sentiment
         tweet.update(extractor.extract_sentiment_onehot_encoding())
@@ -45,8 +45,22 @@ def classify(model, tweets):
         # add classified class
         tweet_classes = ['irrelevant', 'inquiry', 'problem_report']
         tweet_class = tweet_classes[0]  # default is irrelevant
+
+        print('---------------')
+        print(tweet['text'])
+        print('this tweet should be a ', tweet['shouldbe'])
+        # proba =0
+        pred = int(model.clf_problem_report.predict(df_problem_report_model_data)[0]) == 0
+        proba = model.clf_problem_report.predict_proba(df_problem_report_model_data)[0][0]
+        print(f'pro: {pred}-{proba:.2f}')
+        pred = int(model.clf_inquiry.predict(df_inquiry_model_data)[0]) == 0
+        proba = model.clf_inquiry.predict_proba(df_inquiry_model_data)[0][0]
+        print(f'inq: {pred}-{proba:.2f}')
+        pred = int(model.clf_irrelevant.predict(df_irrelevant_model_data)[0]) == 0
+        proba = model.clf_irrelevant.predict_proba(df_irrelevant_model_data)[0][0]
+        print(f'irr: {pred}-{proba:.2f}')
         tweet_class_certainty = np.array([])
-        if int(model.clf_irrelevant.predict(df_irrelevant_model_data)[0]) == 0:   # if the class != irrelevant, check for others
+        if int(model.clf_irrelevant.predict(df_irrelevant_model_data.values)[0]) == 0:   # if the class != irrelevant, check for others
             if int(model.clf_inquiry.predict(df_inquiry_model_data)[0]) == 1:
                 tweet_class = tweet_classes[1]  # class == inquiry
                 try:

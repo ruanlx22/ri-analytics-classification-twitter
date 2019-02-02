@@ -1,5 +1,4 @@
 import os
-import pickle
 import re
 import shlex
 import subprocess
@@ -104,7 +103,7 @@ class Extractor:
                 correction = items[0]+'_'+items[1]
                 text = text.replace(token, correction)
         text = ' '.join([w for w in text.split() if '@' not in w])
-        text = ' '.join([w for w in text.split() if w not in self.nlp.Defaults.stop_words])
+        # text = ' '.join([w for w in text.split() if w not in self.nlp.Defaults.stop_words])
         text = ' '.join([w.lemma_ for w in self.nlp(text) if w.lemma_ != '-PRON-'])
 
         tweet_dict = dict()
@@ -349,24 +348,36 @@ class Extractor:
         text = tweet['text']
         
         tweet_dict = dict()
-        tweet_dict['has_keyword_bug'] = 1 if len(re.findall('bug', text, re.IGNORECASE)) > 0 else 0,
-        tweet_dict['has_keyword_crash'] = 1 if len(re.findall('crash', text, re.IGNORECASE)) > 0 else 0,
-        tweet_dict['has_keyword_malfunzionamento'] = 1 if len(re.findall('malfunzionamento', text, re.IGNORECASE)) > 0 else 0,
-        tweet_dict['has_keyword_blocca'] = 1 if len(re.findall('blocca', text, re.IGNORECASE)) > 0 else 0,
-        tweet_dict['has_keyword_non_funziona'] = 1 if len(re.findall('non funziona', text, re.IGNORECASE)) > 0 else 0,
-        tweet_dict['has_keyword_morto'] = 1 if len(re.findall('morto', text, re.IGNORECASE)) > 0 else 0,
-        tweet_dict['has_keyword_chiuso'] = 1 if len(re.findall('chiuso', text, re.IGNORECASE)) > 0 else 0,
-        tweet_dict['has_keyword_err'] = 1 if len(re.findall('err', text, re.IGNORECASE)) > 0 else 0,
-        tweet_dict['has_keyword_andato'] = 1 if len(re.findall('andato', text, re.IGNORECASE)) > 0 else 0,
-        tweet_dict['has_keyword_problem'] = 1 if len(re.findall('problem', text, re.IGNORECASE)) > 0 else 0,
-        tweet_dict['has_keyword_dovrebbe'] = 1 if len(re.findall('dovrebbe', text, re.IGNORECASE)) > 0 else 0,
-        tweet_dict['has_keyword_vorrei'] = 1 if len(re.findall('vorrei', text, re.IGNORECASE)) > 0 else 0,
-        tweet_dict['has_keyword_aggiungere'] = 1 if len(re.findall('aggiungere', text, re.IGNORECASE)) > 0 else 0,
-        tweet_dict['has_keyword_manca'] = 1 if len(re.findall('manca', text, re.IGNORECASE)) > 0 else 0,
-        tweet_dict['has_keyword_bisogno'] = 1 if len(re.findall('bisogno', text, re.IGNORECASE)) > 0 else 0,
-        tweet_dict['has_keyword_aiuto'] = 1 if len(re.findall('aiuto', text, re.IGNORECASE)) > 0 else 0,
-        tweet_dict['has_keyword_supporto'] = 1 if len(re.findall('supporto', text, re.IGNORECASE)) > 0 else 0,
-        tweet_dict['has_keyword_help'] = 1 if len(re.findall('help', text, re.IGNORECASE)) > 0 else 0
+        if self.conf['lang'] == 'it':
+            tweet_dict['has_keyword_bug'] = 1 if len(re.findall('bug', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_crash'] = 1 if len(re.findall('crash', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_malfunzionamento'] = 1 if len(re.findall('malfunzionamento', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_blocca'] = 1 if len(re.findall('blocca', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_non_funziona'] = 1 if len(re.findall('non funziona', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_morto'] = 1 if len(re.findall('morto', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_chiuso'] = 1 if len(re.findall('chiuso', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_err'] = 1 if len(re.findall('err', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_andato'] = 1 if len(re.findall('andato', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_problem'] = 1 if len(re.findall('problem', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_dovrebbe'] = 1 if len(re.findall('dovrebbe', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_vorrei'] = 1 if len(re.findall('vorrei', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_aggiungere'] = 1 if len(re.findall('aggiungere', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_manca'] = 1 if len(re.findall('manca', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_bisogno'] = 1 if len(re.findall('bisogno', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_aiuto'] = 1 if len(re.findall('aiuto', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_supporto'] = 1 if len(re.findall('supporto', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_help'] = 1 if len(re.findall('help', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_?'] = 1 if len(re.findall('\?', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_grazie'] = 1 if len(re.findall('graz', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_perché'] = 1 if len(re.findall('perch', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_come'] = 1 if len(re.findall('come', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_idea'] = 1 if len(re.findall('idea', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_accordo'] = 1 if len(re.findall('accordo', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_prego'] = 1 if len(re.findall('prego', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_mobile'] = 1 if len(re.findall('mobile', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_internet'] = 1 if len(re.findall('internet', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_no'] = 1 if len(re.findall('no', text, re.IGNORECASE)) > 0 else 0
+            tweet_dict['has_keyword_contatto'] = 1 if len(re.findall('contatto', text, re.IGNORECASE)) > 0 else 0
 
         self.df_has_keyword = pd.DataFrame([tweet_dict])
 

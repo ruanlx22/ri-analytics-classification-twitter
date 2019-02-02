@@ -75,7 +75,7 @@ class LanguageModel:
             self.features_sentiment = config[CFG_FEATURES][CFG_FEATURE_SENTIMENT]
             self.features_problem_report = config[CFG_FEATURES][CFG_FEATURE_PROBLEM_REPORT]
             self.features_inquiry = config[CFG_FEATURES][CFG_FEATURE_INQUIRY]
-            self.features_irelevant = config[CFG_FEATURES][CFG_FEATURE_IRRELEVANT]
+            self.features_irrelevant = config[CFG_FEATURES][CFG_FEATURE_IRRELEVANT]
             self.clf_problem_report = pickle.load(open(os.path.join(model_folder, config[CFG_MODELS][CFG_MODEL_CLASSIFIERS][CFG_MODEL_PROBLEM_REPORT]), 'rb'))
             self.clf_inquiry = pickle.load(open(os.path.join(model_folder, config[CFG_MODELS][CFG_MODEL_CLASSIFIERS][CFG_MODEL_INQUIRY]), 'rb'))
             self.clf_irrelevant = pickle.load(open(os.path.join(model_folder, config[CFG_MODELS][CFG_MODEL_CLASSIFIERS][CFG_MODEL_IRRELEVANT]), 'rb'))
