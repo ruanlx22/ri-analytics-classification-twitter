@@ -12,7 +12,6 @@ RUN python3 -m spacy download en
 
 # Add local files and folders
 ADD / /app/amazon-kinesis-client-python/
-RUN unzip -o models.zip
 
 EXPOSE 9655
 
