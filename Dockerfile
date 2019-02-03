@@ -19,7 +19,7 @@ RUN gdown https://drive.google.com/uc?id=${GDRIVE_DL_LINK}
 
 # Add local files and folders
 ADD / /app/amazon-kinesis-client-python/
-RUN unzip models.zip
+RUN unzip -o models.zip
 
 EXPOSE 9655
 
