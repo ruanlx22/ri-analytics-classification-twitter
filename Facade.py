@@ -57,6 +57,11 @@ def classify(model, tweets):
             classified_tweets.append(tweet)
             continue
 
+        # if no class was identified mark the tweet as irrelevant
+        tweet[KEY_TWEET_CLASS] = TWEET_CLASS_IRR
+        tweet[KEY_TWEET_CLASS_PROBA] = -1
+        classified_tweets.append(tweet)
+
     return classified_tweets
 
 def get_classification_result(target, model, tweet):
