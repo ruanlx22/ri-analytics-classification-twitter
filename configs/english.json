@@ -1,48 +1,66 @@
 {
-  "lang": "en",
-  "ml_features": {
-    "sentiment": ["sentiment_single_val", "sentiment_simplified"],
-    "problem_report": ["tfidf"],
-    "inquiry": [
-      "tfidf",
-      "sentiment_simplified",
-      "linguistic_tense",
-      "linguistic_pos_counts",
-      "linguistic_word_counts",
-      "linguistic_stopword_counts",
-      "n_keywords"
-    ],
-    "irrelevant": ["linguistic_tense", "sentiment_simplified", "bow"]
-  },
-  "models": {
-    "classifiers": {
-      "problem_report": "ml_model_problem_report-en.pickle",
-      "inquiry": "ml_model_inquiry-en.pickle",
-      "irrelevant": "ml_model_irrelevant-en.pickle"
-    },
-    "vocabulary": "vocab-en.pickle",
-    "similarity": {},
-    "scaler": {}
-  },
-  "params": {
-    "bow": {
-      "min_df": 55,
-      "max_df": 0.7
-    },
-    "tfidf": {
-      "min_df": 55,
-      "max_df": 0.7
-    },
-    "spacy": {
-      "lang": "en"
-    },
-    "keywords": {
-      "problem": "bug|crash|glitch|freeze|hang|not work|stop work|kill|dead|frustrate|froze|fix|close|error|gone|problem",
-      "support": "should|wish|add|miss|lack|need|help|support"
-    },
-    "tense": {
-      "present": ["VBG", "VBP", "VBZ"],
-      "past": ["VBD", "VBN"]
-    }
-  }
+	"lang": "en",
+	"problem_report": {
+		"features": {
+			"tfidf": {
+				"min_df": 55,
+				"max_df": 0.7,
+				"vocabulary": "vocab-en.pickle"
+			}
+		},
+		"model": "ml_model_problem_report-en.pickle"
+	},
+	"irrelevant": {
+		"features": {
+			"linguistic": {
+				"tense": {
+					"present": ["VBG", "VBP", "VBZ"],
+      		"past": ["VBD", "VBN"]
+				}
+			},
+			"sentiment": {
+				"forms": [
+					"sentiment_pos",
+					"sentiment_neg",
+					"sentiment_single"
+				]
+			},
+			"bow": {
+				"min_df": 55,
+				"max_df": 0.7,
+				"vocabulary": "vocab-en.pickle"
+			}
+		},
+		"model": "ml_model_irrelevant-en.pickle"
+	},
+	"inquiry": {
+		"features": {
+			"linguistic": {
+				"tense": {
+					"present": ["VBG", "VBP", "VBZ"],
+      				"past": ["VBD", "VBN"]
+				},
+				"pos_counts":{},
+				"word_counts": {},
+				"stopword_counts": {}
+			},
+			"sentiment": {
+				"forms": [
+					"sentiment_is_negative",
+					"sentiment_is_neutral",
+					"sentiment_is_positive"
+				]
+			},
+			"n_keyword": {
+				"problem": "bug|crash|glitch|freeze|hang|not work|stop work|kill|dead|frustrate|froze|fix|close|error|gone|problem",
+				"support": "should|wish|add|miss|lack|need|help|support"
+			},
+			"tfidf": {
+				"min_df": 55,
+				"max_df": 0.7,
+				"vocabulary": "vocab-en.pickle"
+			}
+		},
+		"model": "ml_model_inquiry-en.pickle"
+	}
 }

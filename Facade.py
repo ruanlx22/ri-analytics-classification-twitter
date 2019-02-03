@@ -2,11 +2,15 @@ import uuid
 
 import numpy as np
 
-from FeatureExtractionFactory import FeatureExtractionFactory
-from ModelFactory import ModelFactory
+from feature_extractor.Factory import FeatureExtractor
+from ModelFactory import CFG_PBR, ModelFactory
 
-FEATURE_EXTRACTION_FACTORY = FeatureExtractionFactory()
+KEY_TWEET_CLASS = 'tweet_class'
+KEY_TWEET_CLASS_PROBA = 'classifier_certainty'
 
+TWEET_CLASS_PBR = 'problem_report'
+TWEET_CLASS_INQ = 'inquiry'
+TWEET_CLASS_IRR = 'irrelevant'
 
 def process_tweets(tweets, lang):
     model = ModelFactory.create(lang)
@@ -32,59 +36,58 @@ def classify(model, tweets):
     ###################
     classified_tweets = []
     for tweet in encoded_tweets:
-        extractor = FEATURE_EXTRACTION_FACTORY.create(model)
-        extractor.extract_features(tweet)
-        df_problem_report_model_data = extractor.get_features(model.features_problem_report)
-        df_inquiry_model_data = extractor.get_features(model.features_inquiry)
-        df_irrelevant_model_data = extractor.get_features(model.features_irrelevant)
+        is_irrelevant, proba = get_classification_result(TWEET_CLASS_IRR, model, tweet)
+        if is_irrelevant:
+            tweet[KEY_TWEET_CLASS] = TWEET_CLASS_IRR
+            tweet[KEY_TWEET_CLASS_PROBA] = proba
+            classified_tweets.append(tweet)
+            continue
+        
+        is_inquiry, proba = get_classification_result(TWEET_CLASS_INQ, model, tweet)
+        if is_inquiry:
+            tweet[KEY_TWEET_CLASS] = TWEET_CLASS_INQ
+            tweet[KEY_TWEET_CLASS_PROBA] = proba
+            classified_tweets.append(tweet)
+            continue
 
-        # add sentiment
-        tweet.update(extractor.extract_sentiment_onehot_encoding())
-        extractor.reset()
-
-        # add classified class
-        tweet_classes = ['irrelevant', 'inquiry', 'problem_report']
-        tweet_class = tweet_classes[0]  # default is irrelevant
-
-        print('---------------')
-        print(tweet['text'])
-        print('this tweet should be a ', tweet['shouldbe'])
-        # proba =0
-        pred = int(model.clf_problem_report.predict(df_problem_report_model_data)[0]) == 0
-        proba = model.clf_problem_report.predict_proba(df_problem_report_model_data)[0][0]
-        print(f'pro: {pred}-{proba:.2f}')
-        pred = int(model.clf_inquiry.predict(df_inquiry_model_data)[0]) == 0
-        proba = model.clf_inquiry.predict_proba(df_inquiry_model_data)[0][0]
-        print(f'inq: {pred}-{proba:.2f}')
-        pred = int(model.clf_irrelevant.predict(df_irrelevant_model_data)[0]) == 0
-        proba = model.clf_irrelevant.predict_proba(df_irrelevant_model_data)[0][0]
-        print(f'irr: {pred}-{proba:.2f}')
-        tweet_class_certainty = np.array([])
-        if int(model.clf_irrelevant.predict(df_irrelevant_model_data.values)[0]) == 0:   # if the class != irrelevant, check for others
-            if int(model.clf_inquiry.predict(df_inquiry_model_data)[0]) == 1:
-                tweet_class = tweet_classes[1]  # class == inquiry
-                try:
-                    tweet_class_certainty = model.clf_inquiry.predict_proba(df_inquiry_model_data)[0]
-                except:
-                    pass
-            elif int(model.clf_problem_report.predict(df_problem_report_model_data)[0]) == 1:
-                tweet_class = tweet_classes[2]  # class == problem_report
-                try:
-                    tweet_class_certainty = model.clf_problem_report.predict_proba(df_problem_report_model_data)[0]
-                except:
-                    pass
-        else:
-            try:
-                tweet_class_certainty = model.clf_irrelevant.predict_proba(df_irrelevant_model_data)[0]
-            except:
-                pass
-
-        tweet['tweet_class'] = tweet_class
-        if tweet_class_certainty.any():
-            tweet['classifier_certainty'] = int(tweet_class_certainty[1]*100)
-        else:
-            tweet['classifier_certainty'] = -1
-
-        classified_tweets.append(tweet)
+        is_problem_report, proba = get_classification_result(TWEET_CLASS_PBR, model, tweet)
+        if is_problem_report:
+            tweet[KEY_TWEET_CLASS] = TWEET_CLASS_PBR
+            tweet[KEY_TWEET_CLASS_PROBA] = proba
+            classified_tweets.append(tweet)
+            continue
 
     return classified_tweets
+
+def get_classification_result(target, model, tweet):
+    is_target = False
+    proba = None
+
+    if target == TWEET_CLASS_IRR:
+        model_irr = FeatureExtractor(model.cfg_irr, model.lang, tweet)
+        is_target = int(model.clf_irr.predict(model_irr.data_vector)[0]) == 1
+        try:
+            proba = model.clf_irr.predict_proba(model_irr.data_vector)[0][1]
+            proba = int(proba*100)
+        except:
+            proba = -1
+
+    elif target == TWEET_CLASS_INQ:
+        model_inq = FeatureExtractor(model.cfg_inq, model.lang, tweet)
+        is_target = int(model.clf_inq.predict(model_inq.data_vector)[0]) == 1
+        try:
+            proba = model.clf_inq.predict_proba(model_inq.data_vector)[0][1]
+            proba = int(proba*100)
+        except:
+            proba = -1
+
+    elif target == TWEET_CLASS_PBR:
+        model_pbr = FeatureExtractor(model.cfg_pbr, model.lang, tweet)
+        is_target = int(model.clf_pbr.predict(model_pbr.data_vector)[0]) == 1
+        try:
+            proba = model.clf_pbr.predict_proba(model_pbr.data_vector)[0][1]
+            proba = int(proba*100)
+        except:
+            proba = -1
+    
+    return is_target, proba

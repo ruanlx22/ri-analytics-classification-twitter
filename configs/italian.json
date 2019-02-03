@@ -1,42 +1,153 @@
 {
     "lang": "it",
-    "ml_features": {
-        "sentiment": ["sentistrength_plus"],
-        "problem_report": ["tfidf", "has_keyword", "sentistrength_plus"],
-        "inquiry": ["tfidf", "has_keyword", "sentistrength_plus"],
-        "irrelevant": ["tfidf", "has_keyword", "sentistrength_plus"]
+    "problem_report": {
+        "features": {
+            "tfidf": {
+                "min_df": 20,
+                "max_df": 0.8,
+                "vocabulary": "vocab-it.pickle"
+            },
+            "has_keyword": {
+                "keywords": [
+                    "bug",
+                    "crash",
+                    "malfunzionamento",
+                    "blocca",
+                    "non funziona",
+                    "morto",
+                    "chiuso",
+                    "err",
+                    "andato",
+                    "problem",
+                    "dovrebbe",
+                    "vorrei",
+                    "aggiungere",
+                    "manca",
+                    "bisogno",
+                    "aiuto",
+                    "support",
+                    "help",
+                    "\\?" ,
+                    "graz",
+                    "perch",
+                    "come",
+                    "idea",
+                    "accordo",
+                    "prego",
+                    "mobile",
+                    "internet",
+                    "no",
+                    "contatto"
+                ]
+            }, 
+            "sentiment": {
+                "forms": [
+                    "sentiment_pos", 
+                    "sentiment_neg", 
+                    "sentiment_single"
+                ]
+            }
+        },
+        "model": "ml_model_problem_report-it.pickle"
     },
-    "models": {
-        "classifiers": {
-            "problem_report": "ml_model_problem_report-it.pickle",
-            "inquiry": "ml_model_inquiry-it.pickle",
-            "irrelevant": "ml_model_irrelevant-it.pickle"
+    "irrelevant" : {
+        "features": {
+            "tfidf": {
+                "min_df": 20,
+                "max_df": 0.8,
+                "vocabulary": "vocab-it.pickle"
+            },
+            "has_keyword": {
+                "keywords": [
+                    "bug",
+                    "crash",
+                    "malfunzionamento",
+                    "blocca",
+                    "non funziona",
+                    "morto",
+                    "chiuso",
+                    "err",
+                    "andato",
+                    "problem",
+                    "dovrebbe",
+                    "vorrei",
+                    "aggiungere",
+                    "manca",
+                    "bisogno",
+                    "aiuto",
+                    "support",
+                    "help",
+                    "\\?" ,
+                    "graz",
+                    "perch",
+                    "come",
+                    "idea",
+                    "accordo",
+                    "prego",
+                    "mobile",
+                    "internet",
+                    "no",
+                    "contatto"
+                ]
+            }, 
+            "sentiment": {
+                "forms": [
+                    "sentiment_pos", 
+                    "sentiment_neg", 
+                    "sentiment_single"
+                ]
+            }
         },
-        "vocabulary": "vocab-it.pickle",
-        "similarity": {
-        },
-        "scaler": {
-        }
+        "model": "ml_model_irrelevant-it.pickle"
     },
-    "params": {
-        "bow": {
-            "min_df": 20,
-            "max_df": 0.8
+    "inquiry" : {
+        "features": {
+            "tfidf": {
+                "min_df": 20,
+                "max_df": 0.8,
+                "vocabulary": "vocab-it.pickle"
+            },
+            "has_keyword": {
+                "keywords": [
+                    "bug",
+                    "crash",
+                    "malfunzionamento",
+                    "blocca",
+                    "non funziona",
+                    "morto",
+                    "chiuso",
+                    "err",
+                    "andato",
+                    "problem",
+                    "dovrebbe",
+                    "vorrei",
+                    "aggiungere",
+                    "manca",
+                    "bisogno",
+                    "aiuto",
+                    "support",
+                    "help",
+                    "\\?" ,
+                    "graz",
+                    "perch",
+                    "come",
+                    "idea",
+                    "accordo",
+                    "prego",
+                    "mobile",
+                    "internet",
+                    "no",
+                    "contatto"
+                ]
+            }, 
+            "sentiment": {
+                "forms": [
+                    "sentiment_pos", 
+                    "sentiment_neg", 
+                    "sentiment_single"
+                ]
+            }
         },
-        "tfidf": {
-            "min_df": 20,
-            "max_df": 0.8
-        },
-        "spacy": {
-            "lang": "it"
-        },
-        "keywords": {
-            "problem": "",
-            "support": ""
-        },
-        "tense": {
-            "present": [],
-            "past": []
-        }
+        "model": "ml_model_inquiry-it.pickle"
     }
 }
