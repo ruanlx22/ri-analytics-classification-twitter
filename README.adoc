@@ -14,13 +14,15 @@ The ri-analytics-classification-twitter microservice is cabable of classifying E
 
 1. aquire the sentistrength library from http://sentistrength.wlv.ac.uk/ 
 2. mount the SentiStrength.jar file in the Docker run environment (e.g., docker run --rm -d -v "<path>/SentiStrength.jar:/app/amazon-kinesis-client-python/sentistrength/SentiStrength.jar")
-3. set a Docker ARG __GDRIVE_DL_LINK__ to "14Ktu6CUEfEju6HdK-kg7z3a2MEqgftF4" (docker build --build-arg "GDRIVE_DL_LINK=14Ktu6CUEfEju6HdK-kg7z3a2MEqgftF4"). This will download and unzip the classification models from Google Drive.
+3. set a Docker ARG __GDRIVE_DL_LINK__ to the <DL_LINK_ID> (docker build --build-arg "GDRIVE_DL_LINK=<DL_LINK_ID>"). This will download and unzip the classification models from Google Drive.
+3.1 the link should contain a models.zip archive. Inside it needs a folder per language models/english and models/italian.
+3.2 in the subfolders (for each language) place all models as specified in the config/ files
+3.3 the code runs the feature extraction exactly in the order as specified in the config files
 
 === How to Run The microservice
-
 Run the following commands to start the microservice:
 
-1) docker build --rm -f "Dockerfile" --build-arg "GDRIVE_DL_LINK=14Ktu6CUEfEju6HdK-kg7z3a2MEqgftF4" -t ri-analytics-classification-twitter:latest .
+1) docker build --rm -f "Dockerfile" --build-arg "GDRIVE_DL_LINK=<DL_LINK_ID>" -t ri-analytics-classification-twitter:latest .
 
 2) docker run --rm -d -v "<path>/SentiStrength.jar:/app/amazon-kinesis-client-python/sentistrength/SentiStrength.jar" -p 9655:9655 ri-analytics-classification-twitter
 
