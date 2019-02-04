@@ -3,6 +3,7 @@ import json
 import os
 import pickle
 from collections import OrderedDict
+from pprint import pprint
 
 # folders
 DIR_ROOT = os.path.dirname(__file__)
@@ -70,3 +71,10 @@ class LanguageModel:
             self.clf_pbr = pickle.load(open(os.path.join(model_folder, cfg[CFG_PBR][CFG_MODEL]), 'rb'))
             self.clf_inq = pickle.load(open(os.path.join(model_folder, cfg[CFG_INQ][CFG_MODEL]), 'rb'))
             self.clf_irr = pickle.load(open(os.path.join(model_folder, cfg[CFG_IRR][CFG_MODEL]), 'rb'))
+
+            self.are_feature_vectors_identical = self.__are_features_identical_acrosstargets()
+
+    # returns true, if for all targets (e.g., problem_report, inquiry), the features, their order, and their configuration is the same
+    # then we only need to extract the feature vector once.
+    def __are_features_identical_acrosstargets(self):
+        return self.cfg_pbr[CFG_FEATURES] == self.cfg_inq[CFG_FEATURES] == self.cfg_irr[CFG_FEATURES]

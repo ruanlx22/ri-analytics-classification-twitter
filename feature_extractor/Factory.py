@@ -50,7 +50,6 @@ class FeatureExtractor:
                 tmp_feature_vector = ExtractorLinguistic.extract(self.lang, self.tweet, params)
             feature_vector.update(tmp_feature_vector)
 
-        print('------------------')
         self.data_vector = pd.DataFrame([feature_vector], columns=feature_vector.keys())
 
     def preprocess(self) :
