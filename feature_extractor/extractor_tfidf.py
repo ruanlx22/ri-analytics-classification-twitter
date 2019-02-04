@@ -1,6 +1,7 @@
 import os
 import pickle
 import re
+from collections import OrderedDict
 
 import pandas as pd
 import spacy
@@ -21,7 +22,8 @@ class ExtractorTfidf:
         tfidf_vectorizer.fit_transform(vocab)
         
         tfidf = tfidf_vectorizer.transform([tweet['processed_tweet']])
-        df = pd.DataFrame(data=tfidf.toarray(), columns=tfidf_vectorizer.get_feature_names())
-        df = df.add_prefix('tfidf_')
+        prefix = 'tfidf_'
+        feature_names = [prefix + s for s in tfidf_vectorizer.get_feature_names()]
+        tweet_dict = OrderedDict(zip(feature_names, tfidf.toarray()[0]))
 
-        return df
+        return tweet_dict

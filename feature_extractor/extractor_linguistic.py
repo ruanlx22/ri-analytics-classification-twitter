@@ -84,4 +84,4 @@ class ExtractorLinguistic:
             elif feature == 'stopword_counts':
                 tweet_dict['n_stopwords'] = n_stopwords
 
-        return pd.DataFrame([tweet_dict], columns=tweet_dict.keys())
+        return tweet_dict

@@ -2,6 +2,7 @@ import os
 import re
 import shlex
 import subprocess
+from collections import OrderedDict
 
 import pandas as pd
 import spacy
@@ -30,35 +31,27 @@ class FeatureExtractor:
     def run_pipeline(self):
         # extract features in the order given by the config
         df = pd.DataFrame()
+        feature_vector = OrderedDict()
+
         self.preprocess()
         for feature, params in self.cfg[CFG_FEATURES].items():
             if feature == 'bow':
-                df_tmp = ExtractorBow.extract(self.lang, self.tweet, params)
-                df_tmp.reset_index(drop=True, inplace=True)
-                df = pd.concat([df, df_tmp], axis=1)
+                tmp_feature_vector = ExtractorBow.extract(self.lang, self.tweet, params)
             elif feature == 'tfidf':
-                df_tmp = ExtractorTfidf.extract(self.lang, self.tweet, params)
-                df_tmp.reset_index(drop=True, inplace=True)
-                df = pd.concat([df, df_tmp], axis=1)
+                tmp_feature_vector = ExtractorTfidf.extract(self.lang, self.tweet, params)
             elif feature == 'has_keyword':
-                df_tmp = ExtractorKeywords.extract_has_keywords(self.lang, self.tweet, params)
-                df_tmp.reset_index(drop=True, inplace=True)
-                df = pd.concat([df, df_tmp], axis=1)
+                tmp_feature_vector = ExtractorKeywords.extract_has_keywords(self.lang, self.tweet, params)
             elif feature == 'n_keyword':
-                df_tmp = ExtractorKeywords.extract_n_keywords(self.lang, self.tweet, params)
-                df_tmp.reset_index(drop=True, inplace=True)
-                df = pd.concat([df, df_tmp], axis=1)
+                tmp_feature_vector = ExtractorKeywords.extract_n_keywords(self.lang, self.tweet, params)
             elif feature == 'sentiment':
-                df_tmp, tweet_update = ExtractorSentiment.extract(self.lang, self.tweet, params)
+                tmp_feature_vector, tweet_update = ExtractorSentiment.extract(self.lang, self.tweet, params)
                 self.tweet.update(tweet_update)
-                df_tmp.reset_index(drop=True, inplace=True)
-                df = pd.concat([df, df_tmp], axis=1)
             elif feature == 'linguistic':
-                df_tmp = ExtractorLinguistic.extract(self.lang, self.tweet, params)
-                df_tmp.reset_index(drop=True, inplace=True)
-                df = pd.concat([df, df_tmp], axis=1)
+                tmp_feature_vector = ExtractorLinguistic.extract(self.lang, self.tweet, params)
+            feature_vector.update(tmp_feature_vector)
 
-        self.data_vector = df
+        print('------------------')
+        self.data_vector = pd.DataFrame([feature_vector], columns=feature_vector.keys())
 
     def preprocess(self) :
         if self.lang == 'en':

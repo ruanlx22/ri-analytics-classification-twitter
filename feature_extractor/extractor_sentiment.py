@@ -51,4 +51,4 @@ class ExtractorSentiment:
         tweet_update['sentiment_neg'] = score_neg
         tweet_update['sentiment_single'] = score_single
 
-        return pd.DataFrame([tweet_dict], columns=tweet_dict.keys()), tweet_update
+        return tweet_dict, tweet_update

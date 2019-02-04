@@ -1,6 +1,7 @@
 import os
 import pickle
 import re
+from collections import OrderedDict
 
 import pandas as pd
 import spacy
@@ -21,7 +22,7 @@ class ExtractorBow:
         bow_vectorizer.fit_transform(vocab)
         
         bow = bow_vectorizer.transform([tweet['processed_tweet']])
-        df = pd.DataFrame(data=bow.toarray(), columns=bow_vectorizer.get_feature_names())
-        df = df.add_prefix('bow_')
+        
+        tweet_dict = OrderedDict(zip(bow_vectorizer.get_feature_names(), bow.toarray()[0]))
 
-        return df
+        return tweet_dict

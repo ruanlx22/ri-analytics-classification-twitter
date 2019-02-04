@@ -2,6 +2,7 @@ import codecs
 import json
 import os
 import pickle
+from collections import OrderedDict
 
 # folders
 DIR_ROOT = os.path.dirname(__file__)
@@ -42,14 +43,14 @@ class ModelFactory:
 
         elif lang == 'en':
             if LANGUAGE_MODEL_EN is None:
-                cfg = json.load(reader(open(CFG_ENGLISH, 'rb')))
+                cfg = json.load(open(CFG_ENGLISH), object_pairs_hook=OrderedDict)
                 return LanguageModel(DIR_MODELS_EN, cfg)
             else:
                 return LANGUAGE_MODEL_EN
 
         elif lang == 'it':
             if LANGUAGE_MODEL_IT is None:
-                cfg = json.load(reader(open(CFG_ITALIAN, 'rb')))
+                cfg = json.load(open(CFG_ITALIAN), object_pairs_hook=OrderedDict)
                 return LanguageModel(DIR_MODELS_IT, cfg)
             else:
                 return LANGUAGE_MODEL_IT
@@ -62,9 +63,9 @@ class LanguageModel:
         else:
             self.lang = cfg[CFG_LANG]
             
-            self.cfg_pbr = cfg[CFG_PBR]
-            self.cfg_inq = cfg[CFG_INQ]
-            self.cfg_irr = cfg[CFG_IRR]
+            self.cfg_pbr = OrderedDict(cfg[CFG_PBR])
+            self.cfg_inq = OrderedDict(cfg[CFG_INQ])
+            self.cfg_irr = OrderedDict(cfg[CFG_IRR])
 
             self.clf_pbr = pickle.load(open(os.path.join(model_folder, cfg[CFG_PBR][CFG_MODEL]), 'rb'))
             self.clf_inq = pickle.load(open(os.path.join(model_folder, cfg[CFG_INQ][CFG_MODEL]), 'rb'))
