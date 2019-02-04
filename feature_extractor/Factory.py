@@ -34,23 +34,29 @@ class FeatureExtractor:
         for feature, params in self.cfg[CFG_FEATURES].items():
             if feature == 'bow':
                 df_tmp = ExtractorBow.extract(self.lang, self.tweet, params)
-                df = df.merge(df_tmp, how='outer', left_index=True, right_index=True)
+                df_tmp.reset_index(drop=True, inplace=True)
+                df = pd.concat([df, df_tmp], axis=1)
             elif feature == 'tfidf':
                 df_tmp = ExtractorTfidf.extract(self.lang, self.tweet, params)
-                df = df.merge(df_tmp, how='outer', left_index=True, right_index=True)
+                df_tmp.reset_index(drop=True, inplace=True)
+                df = pd.concat([df, df_tmp], axis=1)
             elif feature == 'has_keyword':
                 df_tmp = ExtractorKeywords.extract_has_keywords(self.lang, self.tweet, params)
-                df = df.merge(df_tmp, how='outer', left_index=True, right_index=True)
+                df_tmp.reset_index(drop=True, inplace=True)
+                df = pd.concat([df, df_tmp], axis=1)
             elif feature == 'n_keyword':
                 df_tmp = ExtractorKeywords.extract_n_keywords(self.lang, self.tweet, params)
-                df = df.merge(df_tmp, how='outer', left_index=True, right_index=True)
+                df_tmp.reset_index(drop=True, inplace=True)
+                df = pd.concat([df, df_tmp], axis=1)
             elif feature == 'sentiment':
                 df_tmp, tweet_update = ExtractorSentiment.extract(self.lang, self.tweet, params)
                 self.tweet.update(tweet_update)
-                df = df.merge(df_tmp, how='outer', left_index=True, right_index=True)
+                df_tmp.reset_index(drop=True, inplace=True)
+                df = pd.concat([df, df_tmp], axis=1)
             elif feature == 'linguistic':
                 df_tmp = ExtractorLinguistic.extract(self.lang, self.tweet, params)
-                df = df.merge(df_tmp, how='outer', left_index=True, right_index=True)
+                df_tmp.reset_index(drop=True, inplace=True)
+                df = pd.concat([df, df_tmp], axis=1)
 
         self.data_vector = df
 
