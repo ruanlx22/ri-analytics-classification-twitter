@@ -1,0 +1,6 @@
+*.pyc
+.scannerwork/*
+.env
+rest_test.http
+.vscode/*
+LICENSE
