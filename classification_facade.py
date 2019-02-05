@@ -2,8 +2,8 @@ import uuid
 
 import numpy as np
 
-from feature_extractor.Factory import FeatureExtractor
-from ModelFactory import CFG_PBR, ModelFactory
+from feature_extractor.extractor_facade import FeatureExtractor
+from model_factory import CFG_PBR, ModelFactory
 
 KEY_TWEET_CLASS = 'tweet_class'
 KEY_TWEET_CLASS_PROBA = 'classifier_certainty'

@@ -15,7 +15,7 @@ from feature_extractor.extractor_keywords import ExtractorKeywords
 from feature_extractor.extractor_linguistic import ExtractorLinguistic
 from feature_extractor.extractor_sentiment import ExtractorSentiment
 from feature_extractor.extractor_tfidf import ExtractorTfidf
-from ModelFactory import CFG_FEATURES, CFG_LANG
+from model_factory import CFG_FEATURES, CFG_LANG
 
 SPACY_MAX_LENGTH = 3000000
 
@@ -27,6 +27,8 @@ class FeatureExtractor:
         self.data_vector = None
 
         self.run_pipeline()
+    
+        self.tweet.pop('processed_tweet', None)
 
     def run_pipeline(self):
         # extract features in the order given by the config

@@ -4,7 +4,7 @@ import os
 #!flask/bin/python
 from flask import Flask, json, jsonify, logging, request
 
-import Facade
+import classification_facade
 
 app = Flask(__name__)
 
@@ -25,7 +25,7 @@ def post_classification_result(lang):
 
     # app.logger.debug(request.data.decode('utf-8'))
     tweets = json.loads(request.data.decode('utf-8'))
-    processed_tweets = Facade.process_tweets(tweets, lang)
+    processed_tweets = classification_facade.process_tweets(tweets, lang)
 
     # app.logger.debug(classified_tweets)
     return jsonify(processed_tweets)

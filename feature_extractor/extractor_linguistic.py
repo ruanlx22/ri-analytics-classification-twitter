@@ -7,7 +7,7 @@ import pandas as pd
 import spacy
 from sklearn.feature_extraction.text import CountVectorizer
 
-from ModelFactory import get_models_dir
+from model_factory import get_models_dir
 
 SPACY_MAX_LENGTH = 3000000
 

@@ -7,7 +7,7 @@ import pandas as pd
 import spacy
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from ModelFactory import get_models_dir
+from model_factory import get_models_dir
 
 
 class ExtractorTfidf:
