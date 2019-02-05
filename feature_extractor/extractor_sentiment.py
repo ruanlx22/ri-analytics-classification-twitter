@@ -53,7 +53,7 @@ class ExtractorSentiment:
         elif (score_single >= -1 and score_single <= 1):
             sentiment = 'NEUTRAL'
         elif (score_single > 1):
-            sentiment = 'POSTIVE'
+            sentiment = 'POSITIVE'
         tweet_update['sentiment'] = sentiment
         tweet_update['sentiment_score'] = score_single
 
