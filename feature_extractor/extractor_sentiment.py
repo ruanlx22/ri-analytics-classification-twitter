@@ -48,11 +48,11 @@ class ExtractorSentiment:
 
         tweet_update = dict()
         sentiment = ''
-        if (tweet_dict['sentiment_single'][0] < -1):
+        if (score_single < -1):
             sentiment = 'NEGATIVE'
-        elif (tweet_dict['sentiment_single'][0] >= -1 and tweet_dict['sentiment_single'][0] <= 1):
+        elif (score_single >= -1 and score_single <= 1):
             sentiment = 'NEUTRAL'
-        elif (tweet_dict['sentiment_single'][0] > 1):
+        elif (score_single > 1):
             sentiment = 'POSTIVE'
         tweet_update['sentiment'] = sentiment
         tweet_update['sentiment_score'] = score_single
