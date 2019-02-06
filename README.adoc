@@ -2,37 +2,50 @@
 
 This service was created as a result of the OpenReq project funded by the European Union Horizon 2020 Research and Innovation programme under grant agreement No 732463.
 
-=== Used Technologies
+== Technical description
+=== What does the microservice do
+The ri-analytics-classification-twitter microservice is cabable of classifying English and Italien tweets into __problem report__, __inquiry__, and __irrelevant__. 
+
+=== Which technologies are used
 - Docker (-> https://www.docker.com/)
 - SentiStrength (-> http://sentistrength.wlv.ac.uk/)
 
-=== Functionalities 
-The ri-analytics-classification-twitter microservice is cabable of classifying English and Italien tweets into __problem report__, __inquiry__, and __irrelevant__. 
 
-=== Installation
+=== How to install it
 *ri-analytics-classification-twitter* requires you to: 
 
-1. aquire the sentistrength library from http://sentistrength.wlv.ac.uk/ 
-2. mount the SentiStrength.jar file in the Docker run environment (e.g., docker run --rm -d -v "<path>/SentiStrength.jar:/app/amazon-kinesis-client-python/sentistrength/SentiStrength.jar")
-3. set a Docker ARG __GDRIVE_DL_LINK__ to the <DL_LINK_ID> (docker build --build-arg "GDRIVE_DL_LINK=<DL_LINK_ID>"). This will download and unzip the classification models from Google Drive.
-3.1 the link should contain a models.zip archive. Inside it needs a folder per language models/english and models/italian.
-3.2 in the subfolders (for each language) place all models as specified in the config/ files
-3.3 the code runs the feature extraction exactly in the order as specified in the config files
+. aquire the sentistrength library from http://sentistrength.wlv.ac.uk/ 
 
-=== How to Run The microservice
+. mount the SentiStrength.jar file in the Docker run environment (e.g., docker run --rm -d -v "<path>/SentiStrength.jar:/app/amazon-kinesis-client-python/sentistrength/SentiStrength.jar")
+
+. set a Docker ARG __GDRIVE_DL_LINK__ to the <DL_LINK_ID> (docker build --build-arg "GDRIVE_DL_LINK=<DL_LINK_ID>"). This will download and unzip the classification models from Google Drive.
+
+.. the link should contain a models.zip archive. Inside it needs a folder per language models/english and models/italian.
+
+.. in the subfolders (for each language) place all models as specified in the config/ files
+
+.. the code runs the feature extraction exactly in the order as specified in the config files
+
+=== How to install it
 Run the following commands to start the microservice:
 
-1) docker build --rm -f "Dockerfile" --build-arg "GDRIVE_DL_LINK=<DL_LINK_ID>" -t ri-analytics-classification-twitter:latest .
+. docker build --rm -f "Dockerfile" --build-arg "GDRIVE_DL_LINK=<DL_LINK_ID>" -t ri-analytics-classification-twitter:latest .
 
-2) docker run --rm -d -v "<path>/SentiStrength.jar:/app/amazon-kinesis-client-python/sentistrength/SentiStrength.jar" -p 9655:9655 ri-analytics-classification-twitter
+. docker run --rm -d -v "<path>/SentiStrength.jar:/app/amazon-kinesis-client-python/sentistrength/SentiStrength.jar" -p 9655:9655 ri-analytics-classification-twitter
 
 
 A full description of the the microservice can be found in the following swagger documentation:
 
-== Public APIs
+=== How to use it (high-level description)
 The API is documented by using Swagger2:
 
 - link:http://217.172.12.199/registry/#/services/ri-analytics-classification-twitter[Rendered Documentation]
+
+=== Notes for developers 
+None.
+
+=== Sources
+None.
 
 == How to contribute
 See OpenReq project contribution link:https://github.com/OpenReqEU/OpenReq/blob/master/CONTRIBUTING.md[Guidlines]
