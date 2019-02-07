@@ -17,7 +17,12 @@ from feature_extractor.extractor_sentiment import ExtractorSentiment
 from feature_extractor.extractor_tfidf import ExtractorTfidf
 from model_factory import CFG_FEATURES, CFG_LANG
 
+# Load models globally to avoid crashes when paralell call are coming
 SPACY_MAX_LENGTH = 3000000
+SPACY_NLP_IT = spacy.load('it')
+SPACY_NLP_EN = spacy.load('en')
+SPACY_NLP_IT.max_length = SPACY_MAX_LENGTH
+SPACY_NLP_EN.max_length = SPACY_MAX_LENGTH
 
 class FeatureExtractor:
     def __init__(self, cfg, lang, tweet):
@@ -56,21 +61,15 @@ class FeatureExtractor:
 
     def preprocess(self) :
         if self.lang == 'en':
-            nlp = spacy.load(self.lang)
-            nlp.max_length = SPACY_MAX_LENGTH
-
             text = self.tweet['text'].strip().lower()
-            text = ' '.join([w for w in text.split() if w not in nlp.Defaults.stop_words])
-            text = ' '.join([w.lemma_ for w in nlp(text) if not w.is_punct])  # lemmatize
+            text = ' '.join([w for w in text.split() if w not in SPACY_NLP_EN.Defaults.stop_words])
+            text = ' '.join([w.lemma_ for w in SPACY_NLP_EN(text) if not w.is_punct])  # lemmatize
             text = ' '.join([w for w in text.split() if not '@' in w])  # remove @ mentions
             text = ' '.join([w for w in text.split() if not 'PRON' in w])  # remove pronouns
 
             self.tweet['processed_tweet'] = text
 
         elif self.lang == 'it':
-            nlp = spacy.load(self.lang)
-            nlp.max_length = SPACY_MAX_LENGTH
-            
             text = self.tweet['text'] if self.tweet['text'] and isinstance(self.tweet['text'], str) else ''
             if not text or text == '' or len(text) >= SPACY_MAX_LENGTH:
                 return ''
@@ -89,7 +88,7 @@ class FeatureExtractor:
                     correction = items[0]+'_'+items[1]
                     text = text.replace(token, correction)
             text = ' '.join([w for w in text.split() if '@' not in w])
-            # text = ' '.join([w for w in text.split() if w not in self.nlp.Defaults.stop_words])
-            text = ' '.join([w.lemma_ for w in nlp(text) if w.lemma_ != '-PRON-'])
+            # text = ' '.join([w for w in text.split() if w not in SPACY_NLP_IT.Defaults.stop_words])
+            text = ' '.join([w.lemma_ for w in SPACY_NLP_IT(text) if w.lemma_ != '-PRON-'])
 
             self.tweet['processed_tweet'] = text
