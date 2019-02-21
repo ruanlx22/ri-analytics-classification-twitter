@@ -22,7 +22,6 @@ app = Flask(__name__)
 def post_classification_result(lang):
     app.logger.debug('/hitec/classify/domain/tweets/lang/{} called'.format(lang))
 
-
     # app.logger.debug(request.data.decode('utf-8'))
     tweets = json.loads(request.data.decode('utf-8'))
     processed_tweets = classification_facade.process_tweets(tweets, lang)
@@ -32,4 +31,4 @@ def post_classification_result(lang):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=9655)
+    app.run(debug=False, threaded=False, host="0.0.0.0", port=9655)
