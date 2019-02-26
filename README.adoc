@@ -18,7 +18,7 @@ The ri-analytics-classification-twitter microservice is cabable of classifying E
 
 . mount the SentiStrength.jar file in the Docker run environment (e.g., docker run --rm -d -v "<path>/SentiStrength.jar:/app/amazon-kinesis-client-python/sentistrength/SentiStrength.jar")
 
-. set a Docker ARG __GDRIVE_DL_LINK__ to the <DL_LINK_ID> (docker build --build-arg "GDRIVE_DL_LINK=<DL_LINK_ID>"). This will download and unzip the classification models from Google Drive.
+. set a Docker ARG __GDRIVE_DL_LINK__ to the <DL_LINK_ID> (e.g, docker build --build-arg "GDRIVE_DL_LINK=1fcMjYmmjY9-WMOauYle6fFLooJ0u9OlU"). This will download and unzip the classification models from Google Drive.
 
 .. the link should contain a models.zip archive. Inside it needs a folder per language models/english and models/italian.
 
