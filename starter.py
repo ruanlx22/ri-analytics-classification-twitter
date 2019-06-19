@@ -6,6 +6,9 @@ from flask import Flask, json, jsonify, logging, request
 
 import classification_facade
 
+with open('./config.json') as config_file:
+    CONFIG = json.load(config_file)
+
 app = Flask(__name__)
 
 ###########################
@@ -31,4 +34,4 @@ def post_classification_result(lang):
 
 
 if __name__ == "__main__":
-    app.run(debug=False, threaded=False, host="0.0.0.0", port=9655)
+    app.run(debug=False, threaded=False, host=CONFIG['HOST'], port=CONFIG['PORT'])
