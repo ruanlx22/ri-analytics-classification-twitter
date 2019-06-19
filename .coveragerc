@@ -1,0 +1,6 @@
+[run]
+omit = coverage-reports/*, demos/*, tests/*, venv/*, Dockerfile, configs/*, sentistrength/*, LICENSE, sequence_diagram.wsd, README.adoc, __init__.py, models/*,swagger.yaml, __pycache__/*, out/*, tests/*, rest_test.http
+[html]
+directory = coverage-reports/html
+[xml]
+output = coverage-reports/coverage.xml
