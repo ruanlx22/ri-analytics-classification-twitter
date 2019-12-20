@@ -21,17 +21,14 @@
 			"sentiment": {
 				"forms": [
 					"sentiment_pos",
-					"sentiment_neg",
-					"sentiment_single"
+					"sentiment_neg"
 				]
 			},
-			"bow": {
-				"min_df": 55,
-				"max_df": 0.7,
-				"vocabulary": "vocab-en.pickle"
+			"length": {
+
 			}
 		},
-		"model": "ml_model_irrelevant-en.pickle"
+		"model": "ml_model_irrelevant-en_new.pickle"
 	},
 	"inquiry": {
 		"features": {
