@@ -15,6 +15,7 @@ from feature_extractor.extractor_keywords import ExtractorKeywords
 from feature_extractor.extractor_linguistic import ExtractorLinguistic
 from feature_extractor.extractor_sentiment import ExtractorSentiment
 from feature_extractor.extractor_tfidf import ExtractorTfidf
+from feature_extractor.extractor_length import ExtractorLength
 from model_factory import CFG_FEATURES, CFG_LANG
 
 # Load models globally to avoid crashes when paralell call are coming
@@ -55,6 +56,8 @@ class FeatureExtractor:
                 self.tweet.update(tweet_update)
             elif feature == 'linguistic':
                 tmp_feature_vector = ExtractorLinguistic.extract(self.lang, self.tweet, params)
+            elif feature == 'length':
+                tmp_feature_vector = ExtractorLength.extract(self.lang, self.tweet, params)
             feature_vector.update(tmp_feature_vector)
 
         self.data_vector = pd.DataFrame([feature_vector], columns=feature_vector.keys())
